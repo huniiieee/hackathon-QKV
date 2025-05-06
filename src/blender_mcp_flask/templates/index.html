@@ -5,46 +5,116 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1 class="title">Blender Assistant</h1>
-
-    <div class="chat-container">
-        <div id="chat-box" class="chat-box"></div>
-        <form id="chat-form">
-            <input type="text" id="user-input" placeholder="명령을 입력하세요 (예: rotate cube)" autocomplete="off">
-            <button type="submit">전송</button>
-        </form>
+<div class="layout">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <h2 class="logo">QKV</h2>
+        <button id="new-chat-btn">New Chat</button>
+        <button id="history-btn">History</button>
     </div>
 
-    <script>
-        const form = document.getElementById("chat-form");
-        const input = document.getElementById("user-input");
-        const chatBox = document.getElementById("chat-box");
+    <!-- 메인 영역 -->
+    <div class="main">
+        <h1 class="title">Blender Assistant</h1>
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const message = input.value.trim();
-            if (!message) return;
+        <div class="chat-container">
+            <div id="chat-box" class="chat-box"></div>
+            <form id="chat-form">
+                <input type="text" id="user-input" placeholder="명령을 입력하세요 (예: rotate cube)" autocomplete="off">
+                <button type="submit">전송</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-            appendMessage("user", message);
-            input.value = "";
+<script>
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("user-input");
+    const chatBox = document.getElementById("chat-box");
+    const newChatBtn = document.getElementById("new-chat-btn");
+    const historyBtn = document.getElementById("history-btn");
 
-            const res = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message }),
-            });
+    let chatHistory = [];
+    let currentChat = [];
+    let showingHistory = false;
+    let isLoadedFromHistory = false;
 
-            const data = await res.json();
-            appendMessage("bot", data.reply);
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (!message || showingHistory) return;
+
+        isLoadedFromHistory = false;
+
+        appendMessage("user", message);
+        currentChat.push({ role: "user", text: message });
+        input.value = "";
+
+        const res = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message }),
         });
 
-        function appendMessage(role, text) {
-            const msg = document.createElement("div");
-            msg.className = `message ${role}`;
-            msg.textContent = text;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    </script>
+        const data = await res.json();
+        appendMessage("bot", data.reply);
+        currentChat.push({ role: "bot", text: data.reply });
+    });
+
+    newChatBtn.addEventListener("click", () => {
+    // '불러온' 기록이 아니고, 실제 대화가 있었던 경우에만 저장
+    if (!isLoadedFromHistory && currentChat.length > 0) {
+        chatHistory.push({
+            time: new Date(),
+            messages: [...currentChat]
+        });
+    }
+
+    // 초기화
+    currentChat = [];
+    showingHistory = false;
+    isLoadedFromHistory = false;
+    chatBox.innerHTML = "";
+    form.style.display = "flex";
+});
+
+    historyBtn.addEventListener("click", () => {
+        chatBox.innerHTML = "";
+        showingHistory = true;
+        form.style.display = "none";
+
+        chatHistory.forEach((item, index) => {
+            const summary = document.createElement("div");
+            summary.className = "history-summary";
+
+            const msg = item.messages[0]?.text || `이전 채팅 ${index + 1}`;
+            const time = new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            summary.innerHTML = `
+                <span class="summary-text">${msg}</span>
+                <span class="summary-time">${time}</span>
+            `;
+
+            summary.addEventListener("click", () => {
+                chatBox.innerHTML = "";
+                showingHistory = false;
+                isLoadedFromHistory = true;
+                currentChat = [...item.messages];
+                item.messages.forEach(msg => appendMessage(msg.role, msg.text));
+                form.style.display = "flex";
+            });
+
+            chatBox.appendChild(summary);
+        });
+    });
+
+    function appendMessage(role, text) {
+        const msg = document.createElement("div");
+        msg.className = `message ${role}`;
+        msg.textContent = text;
+        chatBox.appendChild(msg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
 </body>
 </html>
