@@ -2,49 +2,193 @@
 <html>
 <head>
     <title>Blender MCP Assistant</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+        }
+
+        .layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background-color: #2b2b2b;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2.logo {
+            color: #00ffc3;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .sidebar .menu-group {
+            margin-bottom: 30px;
+        }
+
+        .sidebar .menu-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .sidebar button {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.3s;
+        }
+
+        .sidebar button:hover {
+            background-color: #505050;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .gradio-container {
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            flex: 1;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        }
+
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+            /* 📊 대시보드 카드 추가 */
+    .dashboard {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background: #2c2c2c;
+        border-radius: 10px;
+        padding: 20px;
+        flex: 1;
+        min-width: 180px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .card h3 {
+        font-size: 14px;
+        color: #aaaaaa;
+        margin: 0 0 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .card p {
+        font-size: 20px;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
+    }
+
+    .card span {
+        font-size: 12px;
+        color: #888888;
+    }
+    </style>
 </head>
 <body>
-    <h1 class="title">Blender Assistant</h1>
+<div class="layout">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <h2 class="logo">🧱 Blender MCP</h2>
 
-    <div class="chat-container">
-        <div id="chat-box" class="chat-box"></div>
-        <form id="chat-form">
-            <input type="text" id="user-input" placeholder="명령을 입력하세요 (예: rotate cube)" autocomplete="off">
-            <button type="submit">전송</button>
-        </form>
+        <div class="menu-group">
+            <div class="menu-title">LLM Agent</div>
+            <button>🧠 Model Chat</button>
+            <button>🛠 Prompt Templates</button>
+        </div>
+
+        <div class="menu-group">
+            <div class="menu-title">Asset Tools</div>
+            <button>🧩 Asset Generator</button>
+            <button>🎨 Material Library</button>
+            <button>📦 Scene Presets</button>
+        </div>
+
+        <div class="menu-group">
+            <div class="menu-title">Utility</div>
+            <button>🔧 MCP Tools</button>
+            <button>⚙ Settings</button>
+        </div>
     </div>
 
-    <script>
-        const form = document.getElementById("chat-form");
-        const input = document.getElementById("user-input");
-        const chatBox = document.getElementById("chat-box");
+<!-- 메인 영역 -->
+<div class="main">
+    <h1 class="title">Blender Assistant</h1>
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const message = input.value.trim();
-            if (!message) return;
+    <!-- 📊 대시보드 카드 -->
+    <div class="dashboard">
+        <div class="card">
+            <h3>LLM 토큰 사용량</h3>
+            <p>24,532 <span>tokens</span></p>
+        </div>
+        <div class="card">
+            <h3>작업 요청 수</h3>
+            <p>187 <span>tasks</span></p>
+        </div>
+        <div class="card">
+            <h3>결제 잔여 금액</h3>
+            <p>$12.50 <span>remaining</span></p>
+        </div>
+        <div class="card">
+            <h3>에러 발생률</h3>
+            <p>1.7% <span>errors</span></p>
+        </div>
+    </div>
 
-            appendMessage("user", message);
-            input.value = "";
+    <!-- 🔽 iframe은 아래로 내려감 -->
+    <div class="gradio-container">
+        <iframe src="http://127.0.0.1:7860/"></iframe>
+    </div>
+</div>
 
-            const res = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message }),
-            });
-
-            const data = await res.json();
-            appendMessage("bot", data.reply);
-        });
-
-        function appendMessage(role, text) {
-            const msg = document.createElement("div");
-            msg.className = `message ${role}`;
-            msg.textContent = text;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    </script>
+</div>
 </body>
 </html>

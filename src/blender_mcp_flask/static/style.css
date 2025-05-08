@@ -28,6 +28,13 @@ body {
     height: 600px;
 }
 
+.gradio-container {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
 .chat-box {
     flex: 1;
     overflow-y: auto;
@@ -76,4 +83,93 @@ button {
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
+}
+.layout {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #1e1e2f;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #61dafb;
+}
+
+.sidebar button {
+    background-color: #2d2d44;
+    color: white;
+    border: none;
+    padding: 10px;
+    text-align: left;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #3a3a5a;
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.history-item {
+    background: #444;
+    color: #fff;
+    padding: 8px;
+    margin-bottom: 6px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.history-item:hover {
+    background-color: #555;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.history-summary {
+    background: #dfe6e9;
+    color: #2d3436;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-text {
+    flex: 1;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.summary-time {
+    font-size: 12px;
+    color: #636e72;
 }
