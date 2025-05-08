@@ -1,0 +1,22 @@
+# conda create --name blender_mcp python==3.12.4
+# conda activate blender_mcp
+# pip install -r requirements.txt
+
+fastapi
+uvicorn
+nest_asyncio
+pyngrok
+
+langchain
+langchain_community
+langchain_openai
+faiss-cpu
+
+ipykernel
+sentence-transformers
+
+bs4
+gradio
+ngrok
+httpx
+
