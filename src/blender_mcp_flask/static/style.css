@@ -28,6 +28,13 @@ body {
     height: 600px;
 }
 
+.gradio-container {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
 .chat-box {
     flex: 1;
     overflow-y: auto;
