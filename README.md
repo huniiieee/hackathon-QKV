@@ -36,6 +36,11 @@ pip install -r requirements.txt
 ## 🎥 데모 영상
 https://drive.google.com/file/d/1G0pgYW0rSu_YLzuSGJG6ENgvvUBCayjN/view?usp=drive_link
 
+![image](https://github.com/user-attachments/assets/2f9484b8-39b5-4da4-8ae2-7427e2e97ab1)
+
+![image](https://github.com/user-attachments/assets/bf48f220-2e1c-435a-87f8-aa8dffdda1a5)
+
+![image](https://github.com/user-attachments/assets/82eca3bd-7df9-4ba0-8042-a85e507759aa)
 
 ## 📜 라이선스
 본 프로젝트는 MIT 라이선스를 따릅니다. 자유롭게 사용하시되, 출처를 밝혀주세요.
